@@ -1,11 +1,11 @@
 {
-  "name": "Chidoxic Auto Mobile Center",
-  "short_name": "Chidoxic",
+  "name": "Chidix Auto Enterprise",
+  "short_name": "Chidix",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f7f8fa",
   "theme_color": "#3167e6",
-  "description": "Find your dream car with Chidoxic Auto Mobile Center.",
+  "description": "Find your dream car with Chidix Auto Enterprise.",
   "icons": [
     {
       "src": "https://i.ibb.co/4W2DGKm/car-logo.png",
