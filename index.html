@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Chidix Auto Enterprise</title>
+  <title>Chidoxic Auto Mobile Center</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#3167e6">
   <!-- OpenGraph & Twitter Card -->
   <meta property="og:title" content="Chidoxic Auto Mobile Center">
-  <meta property="og:description" content="Find your dream car with Chidix Auto Enterprise - browse, compare, and inquire instantly!">
+  <meta property="og:description" content="Find your dream car with Chidoxic Auto Mobile Center - browse, compare, and inquire instantly!">
   <meta property="og:image" content="https://i.ibb.co/4W2DGKm/car-logo.png">
   <meta property="og:url" content="https://chidoxicauto.com/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Chidix Auto Enterprise">
-  <meta name="twitter:description" content="Find your dream car with Chidix Auto Enterprise  - browse, compare, and inquire instantly!">
+  <meta name="twitter:title" content="Chidoxic Auto Mobile Center">
+  <meta name="twitter:description" content="Find your dream car with Chidoxic Auto Mobile Center - browse, compare, and inquire instantly!">
   <meta name="twitter:image" content="https://i.ibb.co/4W2DGKm/car-logo.png">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="https://i.ibb.co/4W2DGKm/car-logo.png">
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
   <style>
     /* --- Full CSS including skeletons, admin, responsive, gallery, modal, etc. --- */
     :root {
@@ -159,6 +160,20 @@
     .admin-list{margin-top:10px;}
     .admin-car-title{font-weight:700;}
     .admin-msg{color:#e53935;margin-bottom:7px;font-size:.97em;}
+    #installBtn {
+  background: var(--primary, #3167e6);
+  color: #fff;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.06em;
+  box-shadow: 0 4px 16px rgba(49,103,230,0.18);
+  cursor: pointer;
+  display: none; /* Will be shown by JS */
+}
+#installBtn:hover {
+  background: var(--primary-dark, #1a2233);
+}
   </style>
 </head>
 <body>
@@ -188,6 +203,9 @@
       <button class="nav-btn" onclick="closeMobileMenu();toggleAdminPanel()">Admin</button>
     </nav>
   </header>
+  <button id="installBtn" style="position:fixed;bottom:20px;right:20px;z-index:2000;display:none;">
+  Install App
+</button>
   <main class="main">
     <select id="langSelect" class="lang-select" aria-label="Select language">
       <option value="en">English</option>
@@ -198,11 +216,9 @@
       <div class="hero-content">
         <div class="hero-title" data-i18n="heroTitle">Find Your Dream Car</div>
         <div class="hero-desc" data-i18n="heroDesc">
-         Drive Excellence, Ride with Confidence At Chidix Auto Enterprise, we don’t just sell cars — we ignite passions. <br>
-          Explore a premium collection of vehicles that blend performance, style, and innovation. With a sleek interface, seamless browsing, and eye-catching details, your dream car is just a scroll away.<br><br>
-          Your next ride is waiting. 
-          Let's put you in the driver’s seat of something extraordinary..<br>
-          <b>Your next ride is waiting.!</b>
+          Explore a curated selection of the latest and greatest cars.<br>
+          Modern UI. Smooth transitions. Details that matter.<br>
+          <b>Discover your next ride today!</b>
         </div>
         <button class="hero-action" onclick="scrollToSection('gallery')" data-i18n="viewCars">View Cars</button>
       </div>
