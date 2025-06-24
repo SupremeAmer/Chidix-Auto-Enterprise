@@ -502,8 +502,8 @@ window.showContact = function() {
         <div class="modal-title">Contact Us</div>
         <div class="modal-desc" style="margin-bottom:11px;">
           <b>Looking for a car or need more details?</b> <br>
-          Email: <a href="mailto:info@chidoxicauto.com" style="color:#3167e6;">info@chidoxicauto.com</a><br>
-          Phone: <a href="tel:+2348134567890" style="color:#3167e6;">+234 813 456 7890</a><br>
+          Email: <a href="mailto:chidixautoenterprise@gmail.com" style="color:#3167e6;">Email us</a><br>
+          Phone: <a href="tel:+2347063758013" style="color:#3167e6;">+234 813 456 7890</a><br>
           Location: 123 Dream Cars Blvd, Auto City, Nigeria
         </div>
         <div class="modal-action"><button onclick="closeModal(event)">Close</button></div>
