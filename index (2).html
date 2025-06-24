@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chidoxic Auto Mobile Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#3167e6">
+  <!-- OpenGraph & Twitter Card -->
+  <meta property="og:title" content="Chidoxic Auto Mobile Center">
+  <meta property="og:description" content="Find your dream car with Chidoxic Auto Mobile Center - browse, compare, and inquire instantly!">
+  <meta property="og:image" content="https://i.ibb.co/4W2DGKm/car-logo.png">
+  <meta property="og:url" content="https://chidoxicauto.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chidoxic Auto Mobile Center">
+  <meta name="twitter:description" content="Find your dream car with Chidoxic Auto Mobile Center - browse, compare, and inquire instantly!">
+  <meta name="twitter:image" content="https://i.ibb.co/4W2DGKm/car-logo.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/4W2DGKm/car-logo.png">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    /* --- Full CSS including skeletons, admin, responsive, gallery, modal, etc. --- */
+    :root {
+      --primary: #3167e6;
+      --primary-dark: #1a2233;
+      --secondary: #ffe36b;
+      --accent: #ffefb4;
+      --danger: #e53935;
+      --bg: #f7f8fa;
+      --card: #fff;
+      --text: #1a2233;
+      --text-light: #e3eaf1;
+      --shadow: 0 6px 32px #3167e611;
+    }
+    [data-theme="dark"] {
+      --primary: #6ca0ff;
+      --primary-dark: #121b2c;
+      --bg: #181b24;
+      --card: #23243b;
+      --text: #e3eaf1;
+      --text-light: #fff;
+      --shadow: 0 6px 32px #19336433;
+    }
+    html, body { margin:0; padding:0; min-height:100vh; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .3s, color .3s;
+    }
+    .header {
+      width: 100vw;
+      background: var(--primary);
+      color: #fff;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 24px #19336413;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+      padding: 0 13px;
+    }
+    .nav-left { display: flex; align-items: center; gap: 8px; }
+    .logo { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: cover; margin-right: 5px; border: 2px solid var(--primary-dark);}
+    .site-title { font-size: 1.12em; font-weight: 800; letter-spacing: 0.3px; line-height: 1.1; margin: 0; color: #fff; white-space: nowrap;}
+    .nav-btns { display: flex; gap: 2px; align-items: center;}
+    .nav-btn { background: transparent; border: none; color: #fff; font-size: 1em; font-weight: 600; padding: 7px 12px; border-radius: 7px; transition: background .18s, color .18s; cursor: pointer; outline: none; min-width: 38px;}
+    .nav-btn:hover, .nav-btn:focus { background: #fff; color: var(--primary);}
+    .theme-toggle { font-size: 1.1em; padding: 6px 8px; border: 2px solid #ffe36b90; margin-left: 3px; background: transparent; color: #fff;}
+    .nav-burger { display: none; flex-direction: column; gap: 4px; cursor: pointer; margin-left: 5px; width: 28px; height: 28px; justify-content: center; align-items: center; background: none; border: none;}
+    .nav-burger span { display: block; width: 18px; height: 2.7px; background: #fff; border-radius: 2px; transition: all .25s;}
+    .nav-mobile-menu { display: none; position: fixed; top: 0; right: 0; background: var(--primary); color: #fff; width: 85vw; max-width: 270px; height: 100vh; box-shadow: -2px 0 12px #19336433; z-index: 1200; flex-direction: column; padding: 21px 0 0 0;}
+    .nav-mobile-menu .nav-btn { width: 100%; justify-content: flex-start; padding: 16px 18px; font-size: 1.11em; border-radius: 0; border-bottom: 1px solid #ffffff22;}
+    .nav-mobile-menu .theme-toggle { margin-top: 7px; margin-left: 14px; border-radius: 7px; border: 2px solid #ffe36b99;}
+    .nav-mobile-close { position: absolute; top: 11px; right: 12px; font-size: 2em; background: none; color: #fff; border: none; cursor: pointer; z-index: 1;}
+    @media (max-width: 900px) {
+      .header { height: 52px; padding: 0 6px;}
+      .logo { width: 24px; height: 24px; }
+      .site-title { font-size: 1em; }
+      .nav-btns { gap: 1px; }
+      .nav-btn { font-size: 0.95em; padding: 6px 4px;}
+    }
+    @media (max-width: 600px) {
+      .header { height: 49px; padding: 0 1vw;}
+      .logo { width: 19px; height: 19px; margin-right: 2px;}
+      .site-title { font-size: 0.87em;}
+      .nav-btns { display: none; }
+      .nav-burger { display: flex;}
+      .main { margin-top: 55px !important;}
+    }
+    .main { max-width: 900px; margin: 68px auto 22px auto; padding: 0 3px; display: flex; flex-direction: column; align-items: center;}
+    .lang-select { margin:11px 0 0 auto; display:block; }
+    .hero { width: 100%; background: linear-gradient(97deg, #e3ebff 65%, #f7f8fa 100%); border-radius: 12px; display: flex; flex-direction: row; gap: 20px; align-items: center; justify-content: space-between; padding: 18px 7px 10px 7px; margin-bottom: 18px; box-shadow: 0 2px 12px #3167e61a;}
+    [data-theme="dark"] .hero { background: linear-gradient(97deg, #23243b 65%, #181b24 100%);}
+    .hero-content { flex: 1 1 180px; min-width: 0;}
+    .hero-title { font-size: 1.2em; color: var(--primary); font-weight: 800; margin-bottom: 4px; line-height: 1.15;}
+    .hero-desc { font-size: 0.99em; margin-bottom: 8px; font-weight: 500; line-height: 1.35; opacity: .92;}
+    .hero-action { background: var(--primary); color: #fff; font-weight: 700; font-size: 1.01em; border: none; padding: 9px 17px; border-radius: 6px; box-shadow: 0 4px 14px #3167e620; cursor: pointer; transition: background .17s, transform .11s; margin-top: 6px;}
+    .hero-action:hover { background: var(--primary-dark); color: #fff; transform: scale(1.05);}
+    .hero-img { flex: 0 0 60px; text-align: right; animation: floatCar 3s infinite ease-in-out alternate; min-width: 60px;}
+    .hero-img img { width: 65px; max-width: 100%; border-radius: 7px; box-shadow: 0 8px 32px #3167e61a;}
+    @keyframes floatCar { 0%{transform: translateY(0);} 100%{transform: translateY(11px);} }
+    @media (max-width: 700px){
+      .hero{flex-direction:column;gap:8px;padding:9px 1vw;}
+      .hero-img {text-align:center;}
+      .hero-img img {width: 48px;}
+      .main{margin-top:52px;}
+    }
+    .car-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); gap: 8px; width: 100%; margin-top: 4px;}
+    .car-card { background: var(--card); border-radius: 8px; box-shadow: 0 1px 5px #3167e611, 0 1.5px 7px #1a223311; overflow: hidden; transition: box-shadow .19s, transform .09s, background .17s; display: flex; flex-direction: column; position: relative;}
+    .car-card:hover { box-shadow: 0 6px 16px #3167e622, 0 2px 8px #1a223311; transform: scale(1.025);}
+    .car-img { width: 100%; height: 66px; background: #e3ebff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;}
+    [data-theme="dark"] .car-img { background: #23243b; }
+    .car-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s;}
+    .car-content { padding: 7px 5px 7px 5px; flex: 1 1 auto; display: flex; flex-direction: column;}
+    .car-title { font-size: 0.98em; font-weight: 700; color: var(--primary); margin: 0 0 2px 0; letter-spacing: .3px;}
+    .car-model { font-size: 0.93em; color: var(--primary-dark); font-weight: 600; margin-bottom: 3px; }
+    .car-desc { color: #444e62; font-size: 0.95em; flex: 1 1 auto; margin-bottom: 3px; opacity: .86; }
+    [data-theme="dark"] .car-desc { color: #b5b8cc; }
+    .car-price { font-size: 0.99em; font-weight: 700; color: #e58f00; margin-bottom: 4px;}
+    .car-features { font-size: 0.9em; color: var(--primary-dark); margin-bottom: 3px; display: flex; flex-wrap: wrap; gap: 6px;}
+    .car-features span { background: #e3ebff; color: var(--primary-dark); font-weight: 500; border-radius: 4px; padding: 0.5px 5px; font-size: 0.9em; margin-top: 1px; display: inline-block; transition: background .13s;}
+    [data-theme="dark"] .car-features span { background: #23243b; color: #6ca0ff; }
+    .car-action { margin-top: 5px; text-align: right;}
+    .car-action button { background: var(--primary); color: #fff; border: none; font-size: 0.95em; font-weight: 700; padding: 7px 12px; border-radius: 6px; cursor: pointer; transition: background .16s, transform .11s; box-shadow: 0 2px 6px #3167e611;}
+    .car-action button:hover { background: var(--primary-dark); color: #fff; transform: scale(1.04);}
+    .skeleton { background: #e3ebff; border-radius: 6px; min-height: 120px; width: 100%; margin-bottom: 8px; animation: skeleton 1.2s infinite linear alternate;}
+    @keyframes skeleton { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+    .qrcode-canvas { display:block; margin:8px auto 0 auto; }
+    .swiper-container { width:100%; height:150px; }
+    .swiper-slide img { width:100%; height:100px; object-fit:cover; border-radius:8px;}
+    .footer { background: #f1f2f7; color: #333; text-align: center; padding: 11px 3vw 11px 3vw; font-size: 1em; margin-top: 14px; border-top: 1px solid #e5e8f0; width: 100%;}
+    [data-theme="dark"] .footer { background: #1a1d29; color: #b5b8cc; border-top: 1px solid #23243b;}
+    .footer a { color: var(--primary); text-decoration: underline; margin: 0 7px;}
+    .footer .designer { font-weight:700; color: var(--primary-dark);}
+    .footer-links { margin-top:7px; font-size:.99em; }
+    .modal-backdrop { position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(26,34,51,0.18); z-index:999; display:flex; align-items:center; justify-content:center;}
+    .modal { background: #fff; border-radius: 11px; max-width: 96vw; max-height: 93vh; overflow-y: auto; box-shadow: 0 12px 48px 0 #3167e629; padding: 18px 6px 10px 6px; position: relative; color: var(--text);}
+    [data-theme="dark"] .modal { background: #23243b; color: var(--text);}
+    .modal-close { position: absolute; top: 11px; right: 12px; font-size: 1.3rem; color: var(--primary); background: none; border: none; cursor: pointer; font-weight: 800;}
+    .modal-close:hover { color: #e53935; }
+    .modal-title { font-size: 1em; font-weight:800; margin-bottom:7px; color: var(--primary);}
+    .modal-action { text-align:right; margin-top: 10px;}
+    .modal-action button { background: var(--primary); color:#fff; font-weight:700; padding:7px 17px; border:none; border-radius:7px; cursor:pointer;}
+    /* --- Admin panel styles --- */
+    .admin-panel {width:100%;max-width:340px;margin:15px auto 0 auto;padding:11px 4px 7px 4px;background:var(--card);border-radius:9px;box-shadow:0 4px 18px #3167e70c;display:none;}
+    .admin-panel.active{display:block;}
+    .admin-title{font-weight:800;font-size:1.05em;margin-bottom:10px;color:var(--primary);}
+    .admin-form label{font-weight:600;display:block;margin-top:8px;}
+    .admin-form input,.admin-form textarea{width:100%;padding:6px 8px;font-size:.97em;border-radius:4px;border:1px solid #c7d1eb;margin-top:2px;background:transparent;color:var(--text);}
+    .admin-form textarea{min-height:38px;}
+    .admin-form .admin-row{margin-bottom:5px;}
+    .admin-form button{background:var(--primary);color:#fff;font-weight:700;padding:7px 14px;border:none;border-radius:6px;cursor:pointer;}
+    .admin-form button:hover{background:var(--primary-dark);}
+    .admin-logout{margin-top:7px;color:#e53935;background:none;border:none;cursor:pointer;font-weight:700;}
+    .admin-list{margin-top:10px;}
+    .admin-car-title{font-weight:700;}
+    .admin-msg{color:#e53935;margin-bottom:7px;font-size:.97em;}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-left">
+      <img src="https://i.ibb.co/4W2DGKm/car-logo.png" class="logo" alt="Chidoxic Logo"/>
+      <span class="site-title">Chidoxic Auto Mobile Center</span>
+    </div>
+    <nav class="nav-btns" id="navBtns">
+      <button class="nav-btn" onclick="scrollToSection('gallery')">Browse Cars</button>
+      <button class="nav-btn" onclick="showAbout()">About</button>
+      <button class="nav-btn" onclick="showContact()">Contact</button>
+      <button class="theme-toggle nav-btn" id="themeToggle" title="Toggle dark/light mode">🌙</button>
+      <button class="nav-btn" id="adminBtn" onclick="toggleAdminPanel()">Admin</button>
+    </nav>
+    <button class="nav-burger" id="burgerBtn" aria-label="Open menu" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="nav-mobile-menu" id="navMobileMenu" aria-label="Mobile menu">
+      <button class="nav-mobile-close" id="closeMobileMenu" aria-label="Close menu">&times;</button>
+      <button class="nav-btn" onclick="closeMobileMenu();scrollToSection('gallery')">Browse Cars</button>
+      <button class="nav-btn" onclick="closeMobileMenu();showAbout()">About</button>
+      <button class="nav-btn" onclick="closeMobileMenu();showContact()">Contact</button>
+      <button class="theme-toggle nav-btn" id="themeToggleMobile" title="Toggle dark/light mode">🌙</button>
+      <button class="nav-btn" onclick="closeMobileMenu();toggleAdminPanel()">Admin</button>
+    </nav>
+  </header>
+  <main class="main">
+    <select id="langSelect" class="lang-select" aria-label="Select language">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+    </select>
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-title" data-i18n="heroTitle">Find Your Dream Car</div>
+        <div class="hero-desc" data-i18n="heroDesc">
+          Explore a curated selection of the latest and greatest cars.<br>
+          Modern UI. Smooth transitions. Details that matter.<br>
+          <b>Discover your next ride today!</b>
+        </div>
+        <button class="hero-action" onclick="scrollToSection('gallery')" data-i18n="viewCars">View Cars</button>
+      </div>
+      <div class="hero-img">
+        <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=720&q=80" alt="Modern Car"/>
+      </div>
+    </section>
+    <div style="margin:18px 0 10px 0; text-align:right;">
+      <input id="searchInput" type="search" placeholder="Search..." style="padding:6px 15px; border-radius:7px; border:1.2px solid #ccc;"/>
+      <select id="brandFilter" style="padding:6px 7px; border-radius:7px;">
+        <option value="">All Brands</option>
+      </select>
+      <select id="statusFilter" style="padding:6px 7px; border-radius:7px;">
+        <option value="">All Status</option>
+        <option value="available">Available</option>
+        <option value="sold">Sold</option>
+      </select>
+    </div>
+    <section class="car-list" id="gallery">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </section>
+    <!-- Admin Panel -->
+    <section class="admin-panel" id="adminPanel" style="display:none">
+      <div class="admin-title">Admin Panel</div>
+      <form class="admin-form" id="adminForm" autocomplete="off">
+        <div class="admin-msg" id="adminMsg"></div>
+        <div class="admin-row">
+          <label for="carTitle">Title</label>
+          <input type="text" id="carTitle" required>
+        </div>
+        <div class="admin-row">
+          <label for="carBrand">Brand</label>
+          <input type="text" id="carBrand" required>
+        </div>
+        <div class="admin-row">
+          <label for="carModel">Model Year</label>
+          <input type="text" id="carModel" required>
+        </div>
+        <div class="admin-row">
+          <label for="carPrice">Price</label>
+          <input type="text" id="carPrice" required>
+        </div>
+        <div class="admin-row">
+          <label for="carDesc">Description</label>
+          <textarea id="carDesc" required></textarea>
+        </div>
+        <div class="admin-row">
+          <label for="carMedia">Images (drag and drop or click, min 2 files)</label>
+          <div id="dragDropZone" class="drag-drop-zone" style="background:#f4f7ff;padding:11px;text-align:center;border:2px dashed #3c5edb;border-radius:8px;cursor:pointer;">Drag & drop files here or click to select</div>
+          <input type="file" id="carMedia" accept="image/*" multiple style="display:none" />
+          <div class="file-list-preview" id="filePreview"></div>
+        </div>
+        <div class="admin-row">
+          <label for="carFeatures">Features (comma separated)</label>
+          <input type="text" id="carFeatures" required>
+        </div>
+        <div class="admin-row">
+          <label for="carStatus">Status</label>
+          <select id="carStatus">
+            <option value="available">Available</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+        <button type="submit">Add Car</button>
+      </form>
+      <button class="admin-logout" id="adminLogout" onclick="logoutAdmin()">Logout</button>
+      <div class="admin-list" id="adminList"></div>
+    </section>
+    <div id="modal-root"></div>
+  </main>
+  <footer class="footer">
+    <div>
+      &copy; <span id="year"></span> Chidoxic Auto Mobile Center.<br>
+      <span class="footer-links">
+        <a href="#" onclick="showTerms(event)">Terms &amp; Conditions</a> |
+        <a href="#" onclick="showPrivacy(event)">Privacy Policy</a>
+      </span><br>
+      <span>Designed by <span class="designer">Supremeamer</span></span>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/i18next@23.7.7/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+  <script src="index.js"></script>
+</body>
+</html>
