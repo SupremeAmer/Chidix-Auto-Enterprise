@@ -2,10 +2,24 @@
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('serviceworker.js');
 }
+// ======= PWA Install Prompt logic (after service worker code) =======
 let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+installBtn.addEventListener('click', async function() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    installBtn.style.display = "none";
+    deferredPrompt = null;
+  }
+});
+window.addEventListener('appinstalled', () => {
+  installBtn.style.display = "none";
 });
 
 // ======= i18next Multi-language =======
@@ -472,22 +486,15 @@ window.showAbout = function() {
     <div class="modal-backdrop" onclick="closeModal(event)">
       <div class="modal" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="closeModal(event)">&times;</button>
-        <div class="modal-title">About Chidix Auto Enterprise</div>
+        <div class="modal-title">About Chidoxic Auto Mobile Center</div>
         <div class="modal-desc" style="margin-bottom:12px;">
-          <b>Chidoxic Auto Enterprise</b> we're driving the future of car shopping with a sleek, responsive, and cloud-powered platform.
+          <b>Chidoxic Auto Mobile Center</b> is a modern, animated, and responsive car dealership showcase. Browse a handpicked selection of the world's best cars, each presented with smooth UI transitions and info straight from the cloud database.
           <ul style="padding-left:20px; margin:0;">
-            <li>our digital showroom showcases an expertly curated collection of the world's finest automobiles</li>
+            <li>Modern, clean design with smooth animations and transitions</li>
             <li>Detailed car info including price, model, features, and high-res images</li>
-            <li>We believe buying a car should be as exciting as driving one. That’s why every listing comes packed with detailed specs, high-resolution images, and real-time updates</li>
+            <li>Powered by Appwrite backend</li>
             <li>Responsive and works on all devices</li>
           </ul>
-
-          <h1>Our Mission</h1>
-          <p>To revolutionize the automotive buying experience by combining sleek digital design, responsive technology, and curated car listings — making the journey from desire to driveway seamless, satisfying, and smart.<br> 
-          We’re here to empower customers with the tools and confidence to find their perfect ride, anytime, anywhere.<br></p>
-       <h1>Our Vision</h1>
-       <p>To become Africa’s leading digital-first car dealership — where innovation meets trust, and excellence drives everything we do.<br>
-       As we continue to grow, our vision is to shape a future where car shopping feels less like a chore and more like the thrill of a first drive.</p>
         </div>
         <div class="modal-action"><button onclick="closeModal(event)">Close</button></div>
       </div>
@@ -502,8 +509,8 @@ window.showContact = function() {
         <div class="modal-title">Contact Us</div>
         <div class="modal-desc" style="margin-bottom:11px;">
           <b>Looking for a car or need more details?</b> <br>
-          Email: <a href="mailto:chidixautoenterprise@gmail.com" style="color:#3167e6;">Email us</a><br>
-          Phone: <a href="tel:+2347063758013" style="color:#3167e6;">+234 813 456 7890</a><br>
+          Email: <a href="mailto:info@chidoxicauto.com" style="color:#3167e6;">info@chidoxicauto.com</a><br>
+          Phone: <a href="tel:+2348134567890" style="color:#3167e6;">+234 813 456 7890</a><br>
           Location: 123 Dream Cars Blvd, Auto City, Nigeria
         </div>
         <div class="modal-action"><button onclick="closeModal(event)">Close</button></div>
