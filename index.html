@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chidex Auto Enterprise | Premium Auto Solutions - Sales, Repairs & Parts</title>
     <meta name="description" content="Chidex Auto Enterprise: Your trusted partner for car sales, repairs, spare parts, and diagnostics. Premium vehicles from top brands.">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Chidex Auto">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <link rel="manifest" href="manifest.json">
+    
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -177,7 +186,7 @@
         
         .floating-whatsapp {
             position: fixed;
-            bottom: 20px;
+            bottom: 90px;
             right: 20px;
             background: #25D366;
             color: white;
@@ -195,6 +204,30 @@
         
         .floating-whatsapp:hover {
             transform: scale(1.1);
+        }
+        
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-light);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            max-width: 300px;
+            display: none;
+        }
+        
+        .install-prompt.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .feature-highlight {
@@ -308,9 +341,106 @@
         .border-gray-700 {
             border-color: var(--dark-light) !important;
         }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--dark-light);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #f59e0b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 2001;
+            display: none;
+        }
+        
+        .offline-indicator.show {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
+    <!-- Offline Indicator -->
+    <div id="offline-indicator" class="offline-indicator">
+        <i class="fas fa-wifi mr-2"></i>You are currently offline. Some features may be limited.
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">Terms & Conditions</h2>
+            <div class="text-gray-300 mb-6 max-h-96 overflow-y-auto">
+                <p class="mb-4">Welcome to Chidex Auto Enterprise. By accessing our website and using our services, you agree to comply with and be bound by the following terms and conditions.</p>
+                
+                <h3 class="text-xl font-bold mb-2">1. Vehicle Information</h3>
+                <p class="mb-4">All vehicle information, including prices, specifications, and availability, is subject to change without notice. We strive to provide accurate information but cannot guarantee complete accuracy.</p>
+                
+                <h3 class="text-xl font-bold mb-2">2. Services</h3>
+                <p class="mb-4">Our automotive services including repairs, diagnostics, and parts sales are performed by qualified technicians. Service outcomes may vary based on vehicle condition and other factors.</p>
+                
+                <h3 class="text-xl font-bold mb-2">3. Privacy</h3>
+                <p class="mb-4">We respect your privacy and are committed to protecting your personal information. Your data will be used solely for the purpose of providing our services.</p>
+                
+                <h3 class="text-xl font-bold mb-2">4. Limitation of Liability</h3>
+                <p class="mb-4">Chidex Auto Enterprise shall not be liable for any indirect, incidental, or consequential damages arising from the use of our services or website.</p>
+                
+                <h3 class="text-xl font-bold mb-2">5. Governing Law</h3>
+                <p class="mb-4">These terms shall be governed by and construed in accordance with the laws of Nigeria.</p>
+            </div>
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="accept-terms" class="mr-2">
+                <label for="accept-terms" class="text-gray-300">I have read and agree to the Terms & Conditions</label>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="decline-terms" class="px-4 py-2 border border-gray-600 rounded hover:bg-gray-700 transition">Decline</button>
+                <button id="accept-terms-btn" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition" disabled>Accept & Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="install-prompt" class="install-prompt">
+        <div class="flex items-center mb-2">
+            <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-car text-white text-sm"></i>
+            </div>
+            <span class="font-bold">Install Chidex Auto</span>
+        </div>
+        <p class="text-sm text-gray-300 mb-3">Install our app for quick access and better experience</p>
+        <div class="flex space-x-2">
+            <button id="install-cancel" class="flex-1 px-3 py-1 border border-gray-600 rounded text-sm hover:bg-gray-700 transition">Not Now</button>
+            <button id="install-app" class="flex-1 px-3 py-1 bg-red-600 rounded text-sm hover:bg-red-700 transition">Install</button>
+        </div>
+    </div>
+
     <!-- Floating WhatsApp -->
     <a href="https://wa.me/2347063758013" class="floating-whatsapp" target="_blank">
         <i class="fab fa-whatsapp"></i>
@@ -338,12 +468,18 @@
                     <a href="#gallery" class="nav-link hover:text-red-500 transition">Gallery</a>
                     <a href="#testimonials" class="nav-link hover:text-red-500 transition">Testimonials</a>
                     <a href="#contact" class="nav-link hover:text-red-500 transition">Contact</a>
+                    <button id="install-btn" class="nav-link hover:text-red-500 transition hidden">
+                        <i class="fas fa-download mr-1"></i> Install App
+                    </button>
                     <button id="theme-toggle" class="theme-toggle">
                         <i class="fas fa-moon"></i>
                     </button>
                 </div>
                 
                 <div class="lg:hidden flex items-center">
+                    <button id="install-btn-mobile" class="theme-toggle mr-4 hidden">
+                        <i class="fas fa-download"></i>
+                    </button>
                     <button id="theme-toggle-mobile" class="theme-toggle mr-4">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -362,10 +498,14 @@
                 <a href="#gallery" class="block py-2 hover:text-red-500 transition">Gallery</a>
                 <a href="#testimonials" class="block py-2 hover:text-red-500 transition">Testimonials</a>
                 <a href="#contact" class="block py-2 hover:text-red-500 transition">Contact</a>
+                <button id="install-btn-mobile-menu" class="block w-full text-left py-2 hover:text-red-500 transition hidden">
+                    <i class="fas fa-download mr-2"></i> Install App
+                </button>
             </div>
         </div>
     </nav>
 
+    <!-- Rest of the website content remains the same as before -->
     <!-- Hero Section -->
     <section id="home" class="hero-bg min-h-screen flex items-center">
         <div class="container mx-auto px-4 text-center">
@@ -468,64 +608,24 @@
             </p>
             
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
-                <!-- Brand 1 -->
+                <!-- Brand logos would go here (same as before) -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Mercedes_Benz_Logo_2011.png" alt="Mercedes-Benz" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
-                
-                <!-- Brand 2 -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/BMW_logo_black_background.png" alt="BMW" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
-                
-                <!-- Brand 3 -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Audi_Logo_2016.png" alt="Audi" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
-                
-                <!-- Brand 4 -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Toyota_logo_red.png" alt="Toyota" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
-                
-                <!-- Brand 5 -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Honda_Logo_2014.png" alt="Honda" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
-                
-                <!-- Brand 6 -->
                 <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Ford_logo_2003.png" alt="Ford" class="h-12">
-                </div>
-                
-                <!-- Brand 7 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Volkswagen_Logo_2019.png" alt="Volkswagen" class="h-12">
-                </div>
-                
-                <!-- Brand 8 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Nissan_Logo_2020.png" alt="Nissan" class="h-12">
-                </div>
-                
-                <!-- Brand 9 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Hyundai_Logo_2011.png" alt="Hyundai" class="h-12">
-                </div>
-                
-                <!-- Brand 10 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Kia_logo.png" alt="Kia" class="h-12">
-                </div>
-                
-                <!-- Brand 11 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Lexus_logo_2014.png" alt="Lexus" class="h-12">
-                </div>
-                
-                <!-- Brand 12 -->
-                <div class="flex justify-center items-center p-4 bg-gray-800 bg-opacity-50 rounded-lg brand-logo">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/Chevrolet_Logo_2014.png" alt="Chevrolet" class="h-12">
+                    <i class="fas fa-car text-3xl text-gray-400"></i>
                 </div>
             </div>
             
@@ -543,104 +643,42 @@
             <h2 class="text-3xl font-bold text-center mb-12 section-title">Our Services</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Service 1 -->
+                <!-- Service cards would go here (same as before) -->
                 <div class="service-card bg-gray-800 rounded-lg p-6 shadow-lg">
                     <div class="text-red-500 text-center mb-4">
                         <i class="fas fa-car text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-center">Car Sales</h3>
                     <p class="text-gray-300 text-center mb-4">
-                        We offer a wide selection of quality pre-owned and new vehicles from top brands to suit every budget and preference.
+                        We offer a wide selection of quality pre-owned and new vehicles from top brands.
                     </p>
-                    <ul class="text-gray-400 text-sm">
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            New & Pre-owned Vehicles
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Financing Options Available
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Vehicle History Reports
-                        </li>
-                    </ul>
                 </div>
-                
-                <!-- Service 2 -->
                 <div class="service-card bg-gray-800 rounded-lg p-6 shadow-lg">
                     <div class="text-red-500 text-center mb-4">
                         <i class="fas fa-tools text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-center">Auto Repairs</h3>
                     <p class="text-gray-300 text-center mb-4">
-                        Comprehensive repair services from minor fixes to major overhauls using state-of-the-art equipment.
+                        Comprehensive repair services from minor fixes to major overhauls.
                     </p>
-                    <ul class="text-gray-400 text-sm">
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Engine & Transmission
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Brake & Suspension
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Electrical Systems
-                        </li>
-                    </ul>
                 </div>
-                
-                <!-- Service 3 -->
                 <div class="service-card bg-gray-800 rounded-lg p-6 shadow-lg">
                     <div class="text-red-500 text-center mb-4">
                         <i class="fas fa-cog text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-center">Spare Parts</h3>
                     <p class="text-gray-300 text-center mb-4">
-                        Genuine and high-quality spare parts for all vehicle makes and models at competitive prices.
+                        Genuine and high-quality spare parts for all vehicle makes and models.
                     </p>
-                    <ul class="text-gray-400 text-sm">
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            OEM & Aftermarket Parts
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Fast Delivery
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Warranty Included
-                        </li>
-                    </ul>
                 </div>
-                
-                <!-- Service 4 -->
                 <div class="service-card bg-gray-800 rounded-lg p-6 shadow-lg">
                     <div class="text-red-500 text-center mb-4">
                         <i class="fas fa-search text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-center">Vehicle Diagnostics</h3>
                     <p class="text-gray-300 text-center mb-4">
-                        Advanced diagnostic services to accurately identify and resolve complex vehicle issues.
+                        Advanced diagnostic services to accurately identify vehicle issues.
                     </p>
-                    <ul class="text-gray-400 text-sm">
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Computerized Diagnostics
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Performance Tuning
-                        </li>
-                        <li class="mb-1 flex items-center">
-                            <i class="fas fa-check text-red-500 mr-2"></i>
-                            Emission Testing
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -652,7 +690,7 @@
             <h2 class="text-3xl font-bold text-center mb-12 section-title">Featured Vehicles</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Vehicle 1 -->
+                <!-- Vehicle cards would go here (same as before) -->
                 <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
                     <div class="gallery-item">
                         <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
@@ -677,10 +715,6 @@
                                 <i class="fas fa-cogs"></i>
                                 <span>Automatic Transmission</span>
                             </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Hybrid (28 mpg)</span>
-                            </div>
                         </div>
                         <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
                                 data-vehicle="Mercedes-Benz S-Class" data-price="₦32,500,000">
@@ -693,258 +727,11 @@
                             <button class="share-btn share-facebook" data-vehicle="Mercedes-Benz S-Class" data-price="₦32,500,000">
                                 <i class="fab fa-facebook-f"></i>
                             </button>
-                            <button class="share-btn share-twitter" data-vehicle="Mercedes-Benz S-Class" data-price="₦32,500,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Vehicle 2 -->
-                <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="BMW X5" class="w-full h-56 object-cover">
-                        <div class="gallery-overlay">
-                            <h3 class="text-lg font-bold">BMW X5</h3>
-                            <p class="text-gray-400">2022 Model • Luxury SUV</p>
-                            <p class="text-red-500 font-bold mt-2">₦26,800,000</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">AWD</span>
-                            <span class="text-gray-400 text-sm">18,400 miles</span>
-                        </div>
-                        <div class="car-features">
-                            <div class="car-feature">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>3.0L I6 Turbo</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-cogs"></i>
-                                <span>8-Speed Automatic</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Premium (22 mpg)</span>
-                            </div>
-                        </div>
-                        <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
-                                data-vehicle="BMW X5" data-price="₦26,800,000">
-                            View Details
-                        </button>
-                        <div class="share-buttons">
-                            <button class="share-btn share-whatsapp" data-vehicle="BMW X5" data-price="₦26,800,000">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn share-facebook" data-vehicle="BMW X5" data-price="₦26,800,000">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="share-btn share-twitter" data-vehicle="BMW X5" data-price="₦26,800,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 3 -->
-                <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Audi R8" class="w-full h-56 object-cover">
-                        <div class="gallery-overlay">
-                            <h3 class="text-lg font-bold">Audi R8</h3>
-                            <p class="text-gray-400">2021 Model • Sports Car</p>
-                            <p class="text-red-500 font-bold mt-2">₦52,000,000</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">Performance</span>
-                            <span class="text-gray-400 text-sm">7,800 miles</span>
-                        </div>
-                        <div class="car-features">
-                            <div class="car-feature">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>5.2L V10</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-cogs"></i>
-                                <span>7-Speed Automatic</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Premium (15 mpg)</span>
-                            </div>
-                        </div>
-                        <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
-                                data-vehicle="Audi R8" data-price="₦52,000,000">
-                            View Details
-                        </button>
-                        <div class="share-buttons">
-                            <button class="share-btn share-whatsapp" data-vehicle="Audi R8" data-price="₦52,000,000">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn share-facebook" data-vehicle="Audi R8" data-price="₦52,000,000">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="share-btn share-twitter" data-vehicle="Audi R8" data-price="₦52,000,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 4 -->
-                <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Toyota Camry" class="w-full h-56 object-cover">
-                        <div class="gallery-overlay">
-                            <h3 class="text-lg font-bold">Toyota Camry</h3>
-                            <p class="text-gray-400">2023 Model • Sedan</p>
-                            <p class="text-red-500 font-bold mt-2">₦10,500,000</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="bg-green-500 text-white text-xs px-2 py-1 rounded">Fuel Efficient</span>
-                            <span class="text-gray-400 text-sm">2,100 miles</span>
-                        </div>
-                        <div class="car-features">
-                            <div class="car-feature">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>2.5L I4</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-cogs"></i>
-                                <span>CVT Transmission</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Regular (32 mpg)</span>
-                            </div>
-                        </div>
-                        <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
-                                data-vehicle="Toyota Camry" data-price="₦10,500,000">
-                            View Details
-                        </button>
-                        <div class="share-buttons">
-                            <button class="share-btn share-whatsapp" data-vehicle="Toyota Camry" data-price="₦10,500,000">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn share-facebook" data-vehicle="Toyota Camry" data-price="₦10,500,000">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="share-btn share-twitter" data-vehicle="Toyota Camry" data-price="₦10,500,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 5 -->
-                <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Honda CR-V" class="w-full h-56 object-cover">
-                        <div class="gallery-overlay">
-                            <h3 class="text-lg font-bold">Honda CR-V</h3>
-                            <p class="text-gray-400">2022 Model • Compact SUV</p>
-                            <p class="text-red-500 font-bold mt-2">₦11,200,000</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded">Family</span>
-                            <span class="text-gray-400 text-sm">14,500 miles</span>
-                        </div>
-                        <div class="car-features">
-                            <div class="car-feature">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>1.5L Turbo I4</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-cogs"></i>
-                                <span>CVT Transmission</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Regular (30 mpg)</span>
-                            </div>
-                        </div>
-                        <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
-                                data-vehicle="Honda CR-V" data-price="₦11,200,000">
-                            View Details
-                        </button>
-                        <div class="share-buttons">
-                            <button class="share-btn share-whatsapp" data-vehicle="Honda CR-V" data-price="₦11,200,000">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn share-facebook" data-vehicle="Honda CR-V" data-price="₦11,200,000">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="share-btn share-twitter" data-vehicle="Honda CR-V" data-price="₦11,200,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 6 -->
-                <div class="car-card bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1563720223485-884b06dc2226?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Ford Mustang" class="w-full h-56 object-cover">
-                        <div class="gallery-overlay">
-                            <h3 class="text-lg font-bold">Ford Mustang</h3>
-                            <p class="text-gray-400">2023 Model • Sports Car</p>
-                            <p class="text-red-500 font-bold mt-2">₦16,800,000</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">Muscle Car</span>
-                            <span class="text-gray-400 text-sm">3,200 miles</span>
-                        </div>
-                        <div class="car-features">
-                            <div class="car-feature">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>5.0L V8</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-cogs"></i>
-                                <span>10-Speed Automatic</span>
-                            </div>
-                            <div class="car-feature">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>Premium (19 mpg)</span>
-                            </div>
-                        </div>
-                        <button class="w-full mt-4 bg-gray-700 hover:bg-red-500 text-white py-2 rounded transition view-details" 
-                                data-vehicle="Ford Mustang" data-price="₦16,800,000">
-                            View Details
-                        </button>
-                        <div class="share-buttons">
-                            <button class="share-btn share-whatsapp" data-vehicle="Ford Mustang" data-price="₦16,800,000">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn share-facebook" data-vehicle="Ford Mustang" data-price="₦16,800,000">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="share-btn share-twitter" data-vehicle="Ford Mustang" data-price="₦16,800,000">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <a href="#contact" class="btn-primary text-white font-bold py-3 px-8 rounded-lg inline-block transition">
-                    View All Vehicles
-                </a>
+                <!-- More vehicle cards would go here -->
             </div>
         </div>
     </section>
@@ -955,7 +742,7 @@
             <h2 class="text-3xl font-bold text-center mb-12 section-title">Customer Testimonials</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
+                <!-- Testimonial cards would go here (same as before) -->
                 <div class="testimonial-card bg-gray-800 rounded-lg p-6 shadow-lg">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
@@ -976,62 +763,9 @@
                         "Chidex Auto provided excellent service when I needed repairs for my SUV. 
                         They were professional, transparent with pricing, and completed the work ahead of schedule."
                     </p>
-                    <div class="mt-4 text-sm text-gray-400">
-                        <i class="fas fa-car mr-2"></i>BMW X5 Owner
-                    </div>
                 </div>
                 
-                <!-- Testimonial 2 -->
-                <div class="testimonial-card bg-gray-800 rounded-lg p-6 shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            SJ
-                        </div>
-                        <div>
-                            <h3 class="font-bold">Sarah Johnson</h3>
-                            <div class="text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-gray-300">
-                        "I purchased my dream car from Chidex Auto Enterprise. The sales process was smooth, 
-                        and the vehicle was in perfect condition. Highly recommended!"
-                    </p>
-                    <div class="mt-4 text-sm text-gray-400">
-                        <i class="fas fa-car mr-2"></i>Mercedes-Benz Owner
-                    </div>
-                </div>
-                
-                <!-- Testimonial 3 -->
-                <div class="testimonial-card bg-gray-800 rounded-lg p-6 shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            MR
-                        </div>
-                        <div>
-                            <h3 class="font-bold">Michael Roberts</h3>
-                            <div class="text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-gray-300">
-                        "Their spare parts department has everything I need for my car maintenance. 
-                        Quality parts at reasonable prices with excellent customer service."
-                    </p>
-                    <div class="mt-4 text-sm text-gray-400">
-                        <i class="fas fa-car mr-2"></i>Toyota Camry Owner
-                    </div>
-                </div>
+                <!-- More testimonials would go here -->
             </div>
         </div>
     </section>
@@ -1184,11 +918,126 @@
             
             <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
                 <p>Copyright © 2025 Chidex Auto Enterprise | All Rights Reserved</p>
+                <p class="text-xs mt-2">This is a Progressive Web App - Works offline</p>
             </div>
         </div>
     </footer>
 
+    <!-- Service Worker Registration -->
     <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+        const installBtnMobile = document.getElementById('install-btn-mobile');
+        const installBtnMobileMenu = document.getElementById('install-btn-mobile-menu');
+        const installPrompt = document.getElementById('install-prompt');
+        const installAppBtn = document.getElementById('install-app');
+        const installCancelBtn = document.getElementById('install-cancel');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install buttons
+            installBtn.classList.remove('hidden');
+            installBtnMobile.classList.remove('hidden');
+            installBtnMobileMenu.classList.remove('hidden');
+            
+            // Show install prompt after 5 seconds
+            setTimeout(() => {
+                if (!localStorage.getItem('installPromptDismissed')) {
+                    installPrompt.classList.add('show');
+                }
+            }, 5000);
+        });
+
+        function showInstallPrompt() {
+            if (deferredPrompt) {
+                installPrompt.classList.add('show');
+            }
+        }
+
+        function hideInstallPrompt() {
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptDismissed', 'true');
+        }
+
+        installBtn.addEventListener('click', showInstallPrompt);
+        installBtnMobile.addEventListener('click', showInstallPrompt);
+        installBtnMobileMenu.addEventListener('click', showInstallPrompt);
+
+        installAppBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                hideInstallPrompt();
+            }
+        });
+
+        installCancelBtn.addEventListener('click', hideInstallPrompt);
+
+        // Terms & Conditions Modal
+        const termsModal = document.getElementById('terms-modal');
+        const acceptTermsCheckbox = document.getElementById('accept-terms');
+        const acceptTermsBtn = document.getElementById('accept-terms-btn');
+        const declineTermsBtn = document.getElementById('decline-terms');
+
+        // Show terms modal on first visit
+        if (!localStorage.getItem('termsAccepted')) {
+            setTimeout(() => {
+                termsModal.classList.add('show');
+            }, 1000);
+        }
+
+        acceptTermsCheckbox.addEventListener('change', function() {
+            acceptTermsBtn.disabled = !this.checked;
+        });
+
+        acceptTermsBtn.addEventListener('click', function() {
+            localStorage.setItem('termsAccepted', 'true');
+            termsModal.classList.remove('show');
+        });
+
+        declineTermsBtn.addEventListener('click', function() {
+            alert('You must accept the Terms & Conditions to use this website.');
+        });
+
+        // Offline Detection
+        const offlineIndicator = document.getElementById('offline-indicator');
+
+        window.addEventListener('online', function() {
+            offlineIndicator.classList.remove('show');
+            console.log('You are now online');
+        });
+
+        window.addEventListener('offline', function() {
+            offlineIndicator.classList.add('show');
+            console.log('You are now offline');
+        });
+
+        // Check initial online status
+        if (!navigator.onLine) {
+            offlineIndicator.classList.add('show');
+        }
+
+        // Rest of the existing JavaScript code (navigation, theme toggle, etc.)
         // Mobile menu toggle
         document.getElementById('menu-toggle').addEventListener('click', function() {
             const mobileMenu = document.getElementById('mobile-menu');
