@@ -1,21 +1,54 @@
 {
-  "name": "Chidix Auto Enterprise",
-  "short_name": "Chidix",
-  "start_url": ".",
+  "name": "Chidex Auto Enterprise",
+  "short_name": "Chidex Auto",
+  "description": "Your Trusted Partner in Auto Solutions - Car Sales, Repairs, Spare Parts",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f8fa",
-  "theme_color": "#3167e6",
-  "description": "Find your dream car with Chidix Auto Enterprise.",
+  "background_color": "#111827",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://i.ibb.co/4W2DGKm/car-logo.png",
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://i.ibb.co/4W2DGKm/car-logo.png",
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "categories": ["automotive", "business"],
+  "lang": "en-US"
 }
